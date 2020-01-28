@@ -7,6 +7,7 @@
 </template>
 
 <script>
+	import Bus from '../../bus'
 	
 	export default {
 		props: ['message']

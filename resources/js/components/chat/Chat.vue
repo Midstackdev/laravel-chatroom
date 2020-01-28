@@ -7,9 +7,11 @@
 				cols="30" 
 				rows="4"
 				class="chat__form-input" 
+				v-model="body"
+				@keydown="handleMessageInput"
 			></textarea>
 			<span class="chat__form-helptext">
-				Hit return to send and ctrl + return for a new line
+				Hit Return to send and Shift + Return for a new line
 			</span>
 		</form>
 	</div>
@@ -17,10 +19,55 @@
 
 <script>
 	import ChatMessages from './Messages'
+	import Bus from '../../bus'
+	import moment from 'moment'
 
 	export default {
+		data () {
+			return {
+				body: null
+			}
+		},
+
 		components: {
 			ChatMessages
+		},
+
+		methods: {
+			handleMessageInput (e) {
+				if (e.keyCode === 13 && !e.shiftKey) {
+					e.preventDefault()
+					this.send()
+				}
+			},
+
+			buildTempMessage() {
+				let tempId = Date.now()
+
+				return {
+					id: tempId,
+					body: this.body,
+					created_at: moment().utc(0).format('YYYY-MM-DD HH:mm:ss'),
+					selfOwned: true,
+					user: {
+						name: user.name
+					}
+				}
+
+
+			},
+
+			send () {
+				if (!this.body || this.body.trim() === '') {
+					return
+				}
+
+				let tempMessage = this.buildTempMessage()
+
+				Bus.$emit('message-added', tempMessage)
+
+				this.body = null
+			}
 		}
 	}
 </script>

@@ -1,3 +1,6 @@
+
+import user from './mixins/user'
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -23,6 +26,11 @@ Vue.component('chat', require('./components/chat/Chat.vue').default);
 Vue.component('chat-messages', require('./components/chat/Messages.vue').default);
 Vue.component('chat-message', require('./components/chat/Message.vue').default);
 Vue.component('users', require('./components/chat/Users.vue').default);
+
+/**
+ * Mixins
+ */
+Vue.mixin(user)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
