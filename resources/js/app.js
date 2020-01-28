@@ -19,7 +19,10 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('chat', require('./components/chat/Chat.vue').default);
+Vue.component('chat-messages', require('./components/chat/Messages.vue').default);
+Vue.component('chat-message', require('./components/chat/Message.vue').default);
+Vue.component('users', require('./components/chat/Users.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
