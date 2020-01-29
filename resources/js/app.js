@@ -1,5 +1,6 @@
 
 import user from './mixins/user'
+import pluralize from './mixins/pluralize'
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -31,6 +32,7 @@ Vue.component('users', require('./components/chat/Users.vue').default);
  * Mixins
  */
 Vue.mixin(user)
+Vue.mixin(pluralize)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
