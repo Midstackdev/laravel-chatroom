@@ -1937,7 +1937,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      body: null
+      body: null,
+      bodyBackedUp: null
     };
   },
   components: {
@@ -1945,6 +1946,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     handleMessageInput: function handleMessageInput(e) {
+      this.bodyBackedUp = this.body;
+
       if (e.keyCode === 13 && !e.shiftKey) {
         e.preventDefault();
         this.send();
@@ -1963,12 +1966,20 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     send: function send() {
+      var _this = this;
+
       if (!this.body || this.body.trim() === '') {
         return;
       }
 
       var tempMessage = this.buildTempMessage();
       _bus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('message-added', tempMessage);
+      axios.post('/chat/messages', {
+        body: this.body.trim()
+      })["catch"](function (e) {
+        _this.body = _this.bodyBackedUp;
+        _bus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('message-removed', tempMessage);
+      });
       this.body = null;
     }
   }
@@ -2029,6 +2040,13 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     ChatMessage: _Message__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  methods: {
+    removeMessage: function removeMessage(id) {
+      this.messages = this.messages.filter(function (message) {
+        return message.id !== id;
+      });
+    }
+  },
   mounted: function mounted() {
     var _this = this;
 
@@ -2041,6 +2059,8 @@ __webpack_require__.r(__webpack_exports__);
       if (message.selfOwned) {
         _this.$refs.messages.scrollTop = 0;
       }
+    }).$on('message-removed', function (message) {
+      _this.removeMessage(message.id);
     });
   }
 });
